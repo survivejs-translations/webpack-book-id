@@ -1,60 +1,60 @@
-# What is Webpack
+# apa itu webpack
 
-Webpack is a **module bundler**. Webpack can take care of bundling alongside a separate task runner, however, the line between bundler and task runner has become blurred thanks to community developed webpack plugins. Sometimes these plugins are used to perform tasks that are usually done outside of webpack, such as cleaning the build directory or deploying the build.
+Webpack adalah **module bundler**. Webpack dapat menangani bundling di samping menjalankan tugas yang terpisah, namun, garis antara tugas bundler dan runner telah menjadi hilang berkat plugin webpack yang dikembangkan oleh komunitas. Terkadang plugin ini digunakan untuk melakukan tugas yang biasanya dilakukan di luar webpack, seperti membersihkan direktori build atau deploying build.
 
-React with **Hot Module Replacement** (HMR) helped to greatly popularize webpack and led to webpack's usage in other environments, such as [Ruby on Rails](https://github.com/rails/webpacker). Despite its name, webpack is not limited to the web alone. It can bundle for other targets as well, as discussed in the *Build Targets* chapter.
+dengan React **Hot Module Replacement** (HMR) membantu mempopulerkan webpack dan menyebabkan di tempat lain menggunakan webpack, seperti [Ruby on Rails](https://github.com/rails/webpacker). Meski namanya, webpack tidak terbatas pada web saja. Ini bisa dibundel untuk target lain juga, seperti dibahas di bab *Build Targets* chapter.
 
-T> If you want to understand build tools and their history in a better detail, check out the *Comparison of Build Tools* appendix.
+T> Jika Anda ingin memahami pembuatan alat ini dan sejarah mereka dengan lebih rinci, lihatlah *Comparison of Build Tools* lampiran.
 
-## Webpack Relies on Modules
+## modul reliese di webpack
 
-The smallest project you can bundle with webpack consists of **input** and **output**. The bundling process begins from user defined **entries**. Entries themselves are **modules** and can point to other modules through **imports**.
+Proyek terkecil yang bisa Anda bundel dengan webpack terdiri dari **masuk** and **keluar**. Proses bundling dimulai dari **entri**. yang di tentukan pengguna **modul** dan bisa menunjuk ke modul lain melalui **import**.
 
-When you bundle a project using webpack, it traverses through imports, constructing a **dependency graph** of the project and then generating the **output** based on the configuration. Additionally, it's possible to define **split points** generating separate bundles within the project code itself.
+Saat Anda mengemas proyek menggunakan webpack, Ini terlintasi melalui impor, membangun **grafik dependensi** dari proyek dan kemudian menghasilkan ** output **  yang berdasarkan konfigurasi. Selain itu, memungkinkan untuk menggabungkan **poin terpisah** menghasilkan kumpulan yang terpisah dari kode proyek itu sendiri.
 
-Webpack supports ES2015, CommonJS, and AMD module formats out of the box. The loader mechanism works for CSS as well, with `@import` and `url()` support through *css-loader*. You can also find plugins for specific tasks, such as minification, internationalization, HMR, and so on.
+Webpack mendukung format modul ES2015, CommonJS, dan AMD di luar kotak. mekanisme berkerja loader untuk CSS juga, dengan `@import` dan `url()` dukungan dari *css-loader*. Anda juga bisa menemukan plugin untuk tugas-tugas tertentu, seperti minification, internasionalation, HMR, dan sebagainya.
 
-T> A dependency graph is a directed graph that describes how nodes relate to each other. In this case the graph definition is defined through references (`require`, `import`) between files. Webpack traverses this information in a static manner without executing the source to generate the graph it needs to create bundles.
+T> Grafik dependensi adalah graf yang berarah menggambarkan bagaimana berhubungan satu simpul sama lain. Dalam hal ini definisi grafik didefinisikan melalui referensi(`require`, `import`) antar file. melalui Webpack informasi ini secara statis tanpa mengeksekusi sumber untuk menghasilkan grafik yang dibutuhkan untuk membuat kumpulan.
 
-## Webpack's Execution Process
+## Proses Eksekusi Webpack
 
 ![Webpack's execution process](images/webpack-process.png)
 
-Webpack begins its work from **entries**. Often these are JavaScript modules where webpack begins its traversal process. During this process, webpack evaluates entry matches against **loader** configurations that tell webpack how to transform each match.
+kerja webpack dimulai dari **entri**. Seringkali ini adalah modul JavaScript memulai proses  webpack traversalnya. Selama proses ini, webpack mengevaluasi kecocokan masuk dengan **loader** konfigurasi yang memberi tahu bagaimana mengubah webpack di setiap pertandingan.
 
 {pagebreak}
 
-### Resolution Process
+### Proses Resolusi
 
-An entry itself is a module. When webpack encounters one, webpack tries to match the entry against the file system using the entry's `resolve` configuration. You can tell webpack to perform the lookup against specific directories in addition to *node_modules*. It's also possible to adjust the way webpack matches against file extensions, and you can define specific aliases for directories. The *Package Consuming Techniques* chapter covers these ideas in greater detail.
+Entri itu sendiri adalah sebuah modul. Ketika webpack menemukan satu, webpack mencoba mencocokkan dengan entri sistem file dengan menggunakan konfigurasi `resolve` entri. Anda bisa memberi tahu webpack untuk melakukan pencarian terhadap direktori tertentu selain  node_modules*. Ini juga memungkinkan untuk menyesuaikan cara mencocokkan webpack dengan ekstensi file, dan Anda dapat menentukan aliases khusus untuk direktori. T*Teknik Mengkonsumsi Paket* mencakup gagasan ini secara lebih rinci.
 
-If the resolution pass failed, webpack raises a runtime error. If webpack managed to resolve a file correctly, webpack performs processing over the matched file based on the loader definition. Each loader applies a specific transformation against the module contents.
+Jika resolusi berlalu gagal, webpack menimbulkan kesalahan runtime. Jika webpack berhasil menyelesaikan sebuah file dengan benar, webpack melakukan pemrosesan melalui file yang sesuai berdasarkan definisi loader. Setiap loader menerapkan transformasi spesifik terhadap isi modul.
 
-The way a loader gets matched against a resolved file can be configured in multiple ways, including by file type and by location within the file system. Webpack's flexibility even allows you to apply specific transformation against a file based on *where* it was imported to the project.
+Cara loader mencocokkan dengan file yang diselesaikan dapat dikonfigurasi dengan berbagai cara, termasuk oleh jenis file dan berdasarkan lokasi dalam sistem file. Fleksibilitas Webpack, bahkan memungkinkan Anda menerapkan transformasi spesifik terhadap file berdasarkan *di mana* diimpor ke proyek.
 
-The same resolution process is performed against webpack's loaders. Webpack allows you to apply similar logic when determining which loader it should use. Loaders have resolve configurations of their own for this reason. If webpack fails to perform a loader lookup, it will raise a runtime error.
+Proses resolusi yang sama dilakukan terhadap webpack. Webpack Anda memungkinkan  menerapkan logika yang sama saat menentukan loader mana yang harus digunakan. Loader telah yang menyelesaikan alasan konfigurasi mereka sendiri untuk  ini. Jika webpack gagal melakukan pencarian loader, itu akan meningkatkan kesalahan runtime.
 
-### Webpack Resolves Against Any File Type
+### Webpack Mengatasi Setiap Jenis File
 
-Webpack will resolve each module it encounters while constructing the dependency graph. If an entry contains dependencies, the process will be performed recursively against each dependency until the traversal has completed. Webpack can perform this process against any file type, unlike specialized tools like the Babel or Sass compiler.
+Webpack akan menyelesaikan setiap modul yang ditemui saat membuat grafik dependensi. Jika entri berisi dependensi, proses akan dilakukan secara rekursif terhadap setiap dependensi sampai traversal selesai. Webpack dapat melakukan proses ini terhadap jenis file apa pun, tidak seperti alat khusus seperti kompiler Babel atau Sass.
 
-Webpack gives you control over how to treat different assets it encounters. For example, you can decide to **inline** assets to your JavaScript bundles to avoid requests. Webpack also allows you to use techniques like CSS Modules to couple styling with components, and to avoid issues of standard CSS styling. This flexibility is what makes webpack so valuable.
+Webpack memberi Anda kendali atas bagaimana memperlakukan berbagai aset yang ditemukannya. Sebagai contoh, Anda dapat memutuskan untuk **menyamakan** aset dengan kumpulan JavaScript Anda untuk menghindari permintaan. Webpack juga memungkinkan Anda menggunakan teknik seperti Modul CSS untuk beberapa gaya dengan komponen, dan untuk menghindari masalah gaya CSS standar. Fleksibilitas inilah yang membuat webpack begitu berharga.
 
-Although webpack is used mainly to bundle JavaScript, it can capture assets like images or fonts and emit separate files for them. Entries are only a starting point of the bundling process. What webpack emits depends entirely on the way you configure it.
+Meskipun webpack digunakan terutama untuk menggabungkan JavaScript, ia dapat juga menangkap aset seperti gambar atau tulisan dan memancarkan file terpisah untuk mereka. Entri hanya merupakan titik awal dari proses bundling. Apa webpack yang dipancarkan sepenuhnya tergantung pada cara Anda mengkonfigurasinya.
 
-### Evaluation Process
+### Proses evaluasi
 
-Assuming all loaders were found, webpack evaluates the matched loaders from bottom to top and right to left (`styleLoader(cssLoader('./main.css'))`), running the module through each loader in turn. As a result, you get output which webpack will inject in the resulting **bundle**. The *Loader Definitions* chapter covers the topic in detail.
+Dengan asumsi semua loader ditemukan, webpack mengevaluasi loader yang sesuai dari kiri ke kanan dan kanan ke kiri(`styleLoader(cssLoader('./main.css'))`), menjalankan modul melalui setiap loader secara bergantian. akibatnya, Anda mendapatkan output yang akan disisipkan webpack dalam paket **yang dihasilkan**. *Loader Definitions* mencakup judul topik secara rinci.
 
-If all loader evaluation completed without a runtime error, webpack includes the source in the last bundle. **Plugins** allow you to intercept **runtime events** at different stages of the bundling process.
+Jika semua evaluasi loader selesai tanpa kesalahan runtime, webpack memasukkan sumber dalam bundel terakhir. ** Plugin** memungkinkan Anda untuk mencegat ** acara runtime** pada tahap yang berbeda dari proses bundling.
 
-Although loaders can do a lot, they don’t provide enough power for advanced tasks. Plugins can intercept **runtime events** provided by webpack. A good example is bundle extraction performed by the `ExtractTextPlugin` which, when used with a loader, extracts CSS files out of the bundle and into a separate file. Without this step, CSS would be inlined in the resulting JavaScript, as webpack treats all code as JavaScript by default. The extraction idea is discussed in the *Separating CSS* chapter.
+Meskipun loader dapat melakukan banyak hal, mereka tidak menyediakan cukup tenaga untuk tugas selanjutan. Plugin dapat mencegat **acara runtime** yang disediakan oleh webpack. Contoh yang baik adalah ekstraksi bundel yang dilakukan oleh `ExtractTextPlugin` yang bisa digunakan dengan loader, ekstrak file CSS dari bundel dan ke dalam file terpisah. Tanpa langkah ini, CSS akan dimasukkan ke dalam JavaScript yang dihasilkan, karena webpack memperlakukan semua kode sebagai JavaScript secara default. tehnik ekstraksi dibahas di bab *Memisahkan CSS*.
 
-### Finishing
+### penyelesaian
 
-After every module has been evaluated, webpack writes **output**. The output includes a bootstrap script with a manifest that describes how to begin executing the result in the browser. The manifest can be extracted to a file of its own, as discussed later in the book. The output differs based on the build target you are using (targeting web is not the only option).
+Setelah setiap modul dievaluasi, webpack menulis **output**. Outputnya memasukkan skrip bootstrap dengan manifes yang menjelaskan bagaimana cara mulai mengeksekusi hasilnya di browser. Manifes dapat diekstraksi ke file miliknya sendiri, seperti yang akan dibahas nanti di buku ini. Outputnya berbeda berdasarkan target yang Anda gunakan (penargetan web bukan satu-satunya pilihan).
 
-That’s not all there is to the bundling process. For example, you can define specific **split points** where webpack generates separate bundles that are loaded based on application logic. This idea is discussed in the *Code Splitting* chapter.
+Itu tidak semua ada pada proses bundling. Misalnya, Anda dapat menentukan **poin split** tertentu dimana webpack menghasilkan kumpulan terpisah yang dimuatkan berdasarkan logika aplikasi. Ide ini dibahas di bab *Code Splitting*.
 
 {pagebreak}
 
